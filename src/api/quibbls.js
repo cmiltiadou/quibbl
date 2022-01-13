@@ -25,7 +25,7 @@ export const getOneQuibbl = (quibblId) => {
     })
 }
 
-export const postQuibbl = (user, newQuibbl, value) => {
+export const postQuibbl = (user, quibblTitle, value) => {
     return axios({
         method: 'POST',
         url: apiUrl + '/quibbls',
@@ -34,9 +34,8 @@ export const postQuibbl = (user, newQuibbl, value) => {
         },
         data: {
             quibbl: {
-                title: newQuibbl.title,
+                title: quibblTitle,
                 description: value,
-                img: newQuibbl.img
             }
         }
     })

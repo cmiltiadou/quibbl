@@ -1,4 +1,4 @@
-import TextEditor from "./TextEditor"
+
 
 
 const Home = (props) => {
@@ -11,10 +11,8 @@ const Home = (props) => {
 
 	return (
 		<>
-			<h2>Home Page</h2>
-			<container>
-				<TextEditor onChange={change()}/>
-			</container>
+			<h2>Welcome to Quibblr</h2>
+			
 		</>
 	)
 }
