@@ -4,6 +4,7 @@ import { Editor } from '@tinymce/tinymce-react';
 import { Form, Input, Grid, Button, Segment, Rail, Container, Divider, Header, Select  } from 'semantic-ui-react'
 
 
+
 import { postQuibbl } from '../../api/quibbls'
 
 export default function NewQuibbl(props) {
@@ -23,20 +24,27 @@ export default function NewQuibbl(props) {
         setValue(value)
     }
     
-    const handleTitleUpdate = (quibblTitle) => {
-        setQuibblTitle(quibblTitle)
+  
+
+    const handleTag = (tag) => {
+        console.log('this is tag', tag._id)
+        if (tags.length < 2 && tags.includes(tag._id) === false){
+            setTags([...tags, tag._id])
+        }else if(tags.includes(tag._id)){
+            let filteredTags = tags.filter(id => id !== tag._id)
+            setTags(filteredTags)
+        }
+        
+        
     }
 
     const navigate = useNavigate()
 
-    // const handleChange = (e) => {
-    //     setNewQuibbl({ ...newQuibbl, [e.target.name]: e.target.value })
-    // }
 
     // helper method attached to button
     const createNewQuibbl = () => {
         // axios call to create the new Quibbl in the db
-        postQuibbl(props.user, quibblTitle, value)
+        postQuibbl(props.user, quibblTitle, value, tags, quibblDuration)
             // console.log('this is the current user id:', user._id)
             // console.log('this is the new Quibbl\n', newQuibbl)
             .then(() => {
@@ -48,8 +56,27 @@ export default function NewQuibbl(props) {
             })
     }
 
+    const handleSelect = (e) => {
+        console.log('selection', e)
+    }
+    
+
     const editorRef = useRef(null);
 
+    const allTags = props.tags.map((tag, key) =>{
+    
+        return(
+                    <Form.Field
+                        id='form-button-control-public'
+                        control={Button}
+                        size = "tiny"
+                        content={tag.description}
+                        onClick={() => handleTag(tag)}
+                        color={tags.includes(tag._id) ? tag.color : `${tag.color} basic`}
+                        key={tag.color}
+                    />
+        )
+    })
 
 
 
@@ -85,7 +112,10 @@ export default function NewQuibbl(props) {
 
                 <Select 
                 placeholder='quibbl duration' 
-                options={duration} />
+                options={duration} 
+                onChange={e => handleSelect(e.target.options.duration.value)}
+                
+                />
                 <Divider hidden />
                 <Editor
                     onEditorChange={handleUpdate}
@@ -101,7 +131,7 @@ export default function NewQuibbl(props) {
                             'insertdatetime media table '
                         ],
                         toolbar:
-                            'bold italic backcolor | bullist numlist outdent indent | ',
+                            'bold italic backcolor | bullist numlist outdent indent | image media ',
                         content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:13px }'
                     }}
                 />
@@ -116,68 +146,11 @@ export default function NewQuibbl(props) {
             </Form>
                             <Rail position='right'>
                                 <Segment>
-                                <Header as="h4">Pick 2 tags to describe your quibble</Header>
+                                <Header as="h5">pick 2 tags that describe your quibble</Header>
                                 <Divider/>
-                <Form.Group inline>
-                    <Form.Field
-                        id='form-button-control-public'
-                        control={Button}
-                        size = "tiny"
-                        content='just for fun'
-                        onClick={() => createNewQuibbl()}
-                        color='violet'
-                        
-                    />
-                    <Form.Field
-                        id='form-button-control-public'
-                        control={Button}
-                        size = "tiny"
-                        content='food'
-                        onClick={() => createNewQuibbl()}
-                        color='red'
-                    />
-                    <Form.Field
-                        id='form-button-control-public'
-                        control={Button}
-                        size = "tiny"
-                        content='food'
-                        onClick={() => createNewQuibbl()}
-                        color='red'
-                    />
-                    <Form.Field
-                        id='form-button-control-public'
-                        control={Button}
-                        size = "tiny"
-                        content='food'
-                        onClick={() => createNewQuibbl()}
-                        color='red'
-                    />
-                    <Form.Field
-                        id='form-button-control-public'
-                        control={Button}
-                        size = "tiny"
-                        content='food'
-                        onClick={() => createNewQuibbl()}
-                        color='red'
-                    />
-                    <Form.Field
-                        id='form-button-control-public'
-                        control={Button}
-                        size = "tiny"
-                        content='food'
-                        onClick={() => createNewQuibbl()}
-                        color='red'
-                    />
-                    <Form.Field
-                        id='form-button-control-public'
-                        control={Button}
-                        size = "tiny"
-                        content='food'
-                        onClick={() => createNewQuibbl()}
-                        color='red'
-                    />
-                    
-                </Form.Group>
+                    <Form>
+                    {allTags}
+                    </Form>
                 </Segment>
                             </Rail>
                         </Segment>

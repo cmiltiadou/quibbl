@@ -123,7 +123,7 @@ const App = () => {
 				<Route
 					path='/quibbls/new'
 					element={
-						<NewQuibbl user={user} refreshQuibbls={refreshQuibbls}/>
+						<NewQuibbl user={user} refreshQuibbls={refreshQuibbls} tags={tags}/>
 					}
 				/>
 				<Route

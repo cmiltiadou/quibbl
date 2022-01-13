@@ -1,9 +1,11 @@
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { Button, Popover, OverlayTrigger } from "react-bootstrap"
-import { Label, Container, Header, Divider, Grid, Rail, Segment, Icon} from 'semantic-ui-react'
+import { Label, Container, Header, Divider, Grid, Rail, Segment, Icon } from 'semantic-ui-react'
 
 import moment from 'moment'
+import parse from "html-react-parser"
+
 
 import { destroyQuibbl } from '../../api/quibbls'
 import { getQuibblReplies, upvoteReply } from '../../api/replies'
@@ -62,8 +64,8 @@ export default function ShowQuibbl(props) {
     }
 
 
-    const handleVote = (e) =>{
-        console.log('this is the clicked reply',e)
+    const handleVote = (e) => {
+        console.log('this is the clicked reply', e)
 
         let replyId = e._id
         let user = props.user._id
@@ -71,12 +73,12 @@ export default function ShowQuibbl(props) {
         console.log('this is user id', user)
 
         upvoteReply(replyId, user)
-        .then(() => {
-            refreshReplies()
-        })
-        .catch(err => {
-            console.error(err)
-        })
+            .then(() => {
+                refreshReplies()
+            })
+            .catch(err => {
+                console.error(err)
+            })
 
     }
 
@@ -84,32 +86,32 @@ export default function ShowQuibbl(props) {
     // display them from newest to oldest
     const getAllReplies = quibblReplies.map((reply, i) => {
         const upVote = <div>
-        {reply.bestAnswer ? <Icon color="teal" name='trophy' size="large" /> : ""}
-        <Label as='a'
-        basic
-        color = 'pink'
-        onClick={() => handleVote(reply)} 
-        >
-            <Icon 
-            right 
-            name={reply.votes.includes(props.user._id) ? 'handshake'  : 'handshake outline'} 
-            size="large" 
-            />
+            {reply.bestAnswer ? <Icon color="teal" name='trophy' size="large" /> : ""}
+            <Label as='a'
+                basic
+                color='pink'
+                onClick={() => handleVote(reply)}
+            >
+                <Icon
+                    right
+                    name={reply.votes.includes(props.user._id) ? 'handshake' : 'handshake outline'}
+                    size="large"
+                />
 
-            Votes: {reply.votes.length}
-        </Label>
+                Votes: {reply.votes.length}
+            </Label>
         </div>
 
         return (
             <Segment>
-            <ShowReply
-                reply={reply}
-                key={i}
-                currentQuibblId={currentQuibbl._id}
-                refreshReplies={refreshReplies}
-                currentUser={props.user}
-            />
-            {upVote}
+                <ShowReply
+                    reply={reply}
+                    key={i}
+                    currentQuibblId={currentQuibbl._id}
+                    refreshReplies={refreshReplies}
+                    currentUser={props.user}
+                />
+                {upVote}
             </Segment>
         )
     })
@@ -119,21 +121,30 @@ export default function ShowQuibbl(props) {
         setNewReply({ ...newReply, [e.target.name]: e.target.value })
     }
 
+
+    const options = {
+        replace: (domNode) => {
+            if (domNode.attribs && domNode.attribs.class === "remove") {
+                return <></>;
+            }
+        }
+    }
+
     return (
         <>
             {!currentQuibbl ? <h1>Loading...</h1> : (
                 <div>
                     <Container textAlign='left'>
-                    <Divider hidden />
+                        <Divider hidden />
                         <Grid left columns={3}>
-                        <Grid.Column width={3}></Grid.Column>
+                            <Grid.Column width={3}></Grid.Column>
                             <Grid.Column width={9}>
                                 <Segment>
                                     <Header as='h3'>{currentQuibbl.title}</Header>
                                     <Divider />
                                     <div>
-                                        {currentQuibbl.description}
-                                        </div>
+                                        {parse(currentQuibbl.description, options)}
+                                    </div>
                                     <Rail position='right'>
                                         <Label>
                                             {currentQuibbl.owner.userName}
@@ -147,19 +158,19 @@ export default function ShowQuibbl(props) {
                     </Container>
                     {/* <----- NEW ANSWER -----> */}
                     <Container>
-                    <Grid left columns={3}>
-                        <Grid.Column width={3}></Grid.Column>
-                        <Grid.Column width={9}>
-                        <NewReply
-                            user={props.user}
-                            currentQuibbl={currentQuibbl}
-                            refreshReplies={refreshReplies}
-                        />
-                        <Divider hidden />
-                        <Divider hidden />
-                        <Divider hidden />
-                        {getAllReplies}
-                        </Grid.Column>
+                        <Grid left columns={3}>
+                            <Grid.Column width={3}></Grid.Column>
+                            <Grid.Column width={9}>
+                                <NewReply
+                                    user={props.user}
+                                    currentQuibbl={currentQuibbl}
+                                    refreshReplies={refreshReplies}
+                                />
+                                <Divider hidden />
+                                <Divider hidden />
+                                <Divider hidden />
+                                {getAllReplies}
+                            </Grid.Column>
                         </Grid>
                     </Container>
                 </div>
