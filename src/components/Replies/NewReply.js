@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { postReply } from '../../api/replies'
-import { Button, Comment, Form, Header } from 'semantic-ui-react'
+import { Button, Form } from 'semantic-ui-react'
 
 export default function NewReply(props) {
 

@@ -59,7 +59,7 @@ const Home = (props) => {
 
 	return (
 		<Container textAlign='left'>
-		<Grid divided='vertically' padded>
+		<Grid divided='vertically' stackable padded>
 			<Grid.Row columns={1} id="home-row">
 				<Grid.Column textAlign='center' id="typewriter-div">
 				<Typewriter

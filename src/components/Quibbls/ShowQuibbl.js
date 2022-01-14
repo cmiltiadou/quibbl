@@ -1,13 +1,10 @@
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation} from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import { Button, Popover, OverlayTrigger } from "react-bootstrap"
 import { Label, Container, Header, Divider, Grid, Rail, Segment, Icon } from 'semantic-ui-react'
 
 import moment from 'moment'
 import parse from "html-react-parser"
-
-
-import { destroyQuibbl } from '../../api/quibbls'
+// import { destroyQuibbl } from '../../api/quibbls'
 import { getQuibblReplies, upvoteReply } from '../../api/replies'
 
 
@@ -23,10 +20,7 @@ export default function ShowQuibbl(props) {
     const { pathname } = useLocation()
     const quibblId = pathname.split('/')[2]
     // console.log('this is the problem id:', problemId)
-    let currentQuibbl = props.quibbls && props.quibbls.find(x => x._id == quibblId)
-
-
-    const navigate = useNavigate()
+    let currentQuibbl = props.quibbls && props.quibbls.find(x => x._id === quibblId)
 
     // delete is currently disabled, since deletes are only handled on an admin level
     // // helper method attached to delete button
@@ -67,10 +61,10 @@ export default function ShowQuibbl(props) {
 
     const handleVote = (e) => {
         console.log('this is the clicked reply', e)
-        
+
         let replyId = e._id
         let user = props.user._id
-        
+
         console.log('this is user id', user)
 
         upvoteReply(replyId, user)
@@ -80,7 +74,7 @@ export default function ShowQuibbl(props) {
             .catch(err => {
                 console.error(err)
             })
-        
+
     }
 
 
@@ -91,7 +85,7 @@ export default function ShowQuibbl(props) {
             <Label as='a'
                 basic
                 color='pink'
-                onClick={props.user ? () => handleVote(reply) : "" }
+                onClick={props.user ? () => handleVote(reply) : ""}
             >
                 <Icon
                     right
@@ -130,7 +124,7 @@ export default function ShowQuibbl(props) {
                 <div>
                     <Container textAlign='left'>
                         <Divider hidden />
-                        <Grid left columns={3}>
+                        <Grid left stackable columns={3}>
                             <Grid.Column width={3}></Grid.Column>
                             <Grid.Column width={9}>
                                 <Segment>
@@ -139,12 +133,13 @@ export default function ShowQuibbl(props) {
                                     <div>
                                         {parse(currentQuibbl.description, options)}
                                     </div>
-                                    {props.user && props.user.userName === currentQuibbl.owner.userName == null ?
-                                    <EditQuibbl
-                                        quibbl={currentQuibbl}
-                                        user={props.user}
-                                        refreshQuibbl={props.refreshQuibbls}
-                                    /> : ""}
+                                    {/* // this bit of logic will make sure that only the quibbl owner can access the edit page. */}
+                                    {props.user && props.user.userName === currentQuibbl.owner.userName ?
+                                        <EditQuibbl
+                                            quibbl={currentQuibbl}
+                                            user={props.user}
+                                            refreshQuibbl={props.refreshQuibbls}
+                                        /> : ""}
                                     <Rail position='right'>
                                         <Label>
                                             {currentQuibbl.owner.userName}

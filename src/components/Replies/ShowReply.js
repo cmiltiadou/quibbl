@@ -1,5 +1,4 @@
-import { useState } from "react"
-import {Comment,} from 'semantic-ui-react'
+import { Comment } from 'semantic-ui-react'
 
 import moment from 'moment'
 
