@@ -33,7 +33,8 @@ Install procedure:
 ## Wireframes
 ![Wireframes](public/wireframes.png)
 
-
+## Collections
+![Collections](public/collections.png)
 
 ## MVP
 * Create a single page MERN application using ReactJS

@@ -130,9 +130,7 @@ export default function ShowQuibbl(props) {
                                 <Segment>
                                     <Header as='h3'>{currentQuibbl.title}</Header>
                                     <Divider />
-                                    <div>
                                         {parse(currentQuibbl.description, options)}
-                                    </div>
                                     {/* // this bit of logic will make sure that only the quibbl owner can access the edit page. */}
                                     {props.user && props.user.userName === currentQuibbl.owner.userName ?
                                         <EditQuibbl

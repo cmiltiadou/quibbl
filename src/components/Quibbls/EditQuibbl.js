@@ -36,7 +36,7 @@ export default function EditQuibbl(props) {
             onClose={() => setOpen(false)}
             onOpen={() => setOpen(true)}
             open={open}
-            trigger={<Button>Show Modal</Button>}
+            trigger={<Button>Edit Quibbl</Button>}
         >
             <Modal.Header>Editing quibbl</Modal.Header>
             <Modal.Content>
