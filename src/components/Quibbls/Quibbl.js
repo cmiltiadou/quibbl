@@ -5,8 +5,6 @@ import { Link } from 'react-router-dom'
 export default function Quibbl(props) {
 
     let userName = props.quibbl.owner.userName
-    let description = props.quibbl.description
-
     let tag1 = props.quibbl.tags[0].description
     let tag2 = props.quibbl.tags[1].description
     let tag1Color = props.quibbl.tags[0].color
@@ -33,12 +31,12 @@ export default function Quibbl(props) {
                 <Divider hidden/>
                 <Card
                     raised
-                    color='teal'
+                    color={props.quibbl.owner.userName.includes('quibbl_official') ? 'red' :'teal'}
                     header={props.quibbl.title}
                     meta={moment(props.quibbl.createdAt).fromNow()} 
                     description={`user: ${userName}`}
                     extra={tags}
-                    />
+                />
         </>
     )
 }

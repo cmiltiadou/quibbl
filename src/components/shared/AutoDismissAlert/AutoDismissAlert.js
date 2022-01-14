@@ -1,6 +1,5 @@
 import React from 'react'
-import Alert from 'react-bootstrap/Alert'
-import { Message } from 'semantic-ui-react'
+import { Message, Container } from 'semantic-ui-react'
 
 // import './AutoDismissAlert.scss'
 
@@ -34,14 +33,16 @@ class AutoDismissAlert extends React.Component {
 		}
 
 		return (
-			<Message
-				// dismissible
-				// show={this.state.show}
-				onDismiss= {this.handleClose}
-				header = {heading}
-				content= {message}
-				
-			/>
+			<Container>
+				<Message
+					size="small"
+					compact
+					onDismiss= {this.handleClose}
+					header = {heading}
+					content= {message}
+					floating
+				/>
+			</Container>
 		)
 	}
 }

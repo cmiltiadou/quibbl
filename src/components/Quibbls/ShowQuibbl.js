@@ -13,11 +13,11 @@ import { getQuibblReplies, upvoteReply } from '../../api/replies'
 
 import NewReply from '../Replies/NewReply'
 import ShowReply from '../Replies/ShowReply'
+import EditQuibbl from './EditQuibbl'
 // import EditQuibbl from './EditQuibbl'
 
 export default function ShowQuibbl(props) {
 
-    const [newReply, setNewReply] = useState('')
     const [quibblReplies, setQuibblReplies] = useState([])
 
     const { pathname } = useLocation()
@@ -28,19 +28,20 @@ export default function ShowQuibbl(props) {
 
     const navigate = useNavigate()
 
-    // helper method attached to delete button
-    const deleteQuibbl = () => {
-        // axios call to delete problem from db
-        destroyQuibbl(props.user, currentQuibbl._id)
-            // console.log('THIS IS:', `${apiUrl}/problems/${itemId}`)
-            .then(() => {
-                props.refreshQuibbls()
-                navigate('/quibbls')
-            })
-            .catch(err => {
-                console.error(err)
-            })
-    }
+    // delete is currently disabled, since deletes are only handled on an admin level
+    // // helper method attached to delete button
+    // const deleteQuibbl = () => {
+    //     // axios call to delete problem from db
+    //     destroyQuibbl(props.user, currentQuibbl._id)
+    //         // console.log('THIS IS:', `${apiUrl}/problems/${itemId}`)
+    //         .then(() => {
+    //             props.refreshQuibbls()
+    //             navigate('/quibbls')
+    //         })
+    //         .catch(err => {
+    //             console.error(err)
+    //         })
+    // }
 
     useEffect(() => {
         // axios call to find all replies connected to current quibbl id
@@ -66,10 +67,10 @@ export default function ShowQuibbl(props) {
 
     const handleVote = (e) => {
         console.log('this is the clicked reply', e)
-
+        
         let replyId = e._id
         let user = props.user._id
-
+        
         console.log('this is user id', user)
 
         upvoteReply(replyId, user)
@@ -79,7 +80,7 @@ export default function ShowQuibbl(props) {
             .catch(err => {
                 console.error(err)
             })
-
+        
     }
 
 
@@ -90,14 +91,13 @@ export default function ShowQuibbl(props) {
             <Label as='a'
                 basic
                 color='pink'
-                onClick={() => handleVote(reply)}
+                onClick={props.user ? () => handleVote(reply) : "" }
             >
                 <Icon
                     right
-                    name={reply.votes.includes(props.user._id) ? 'handshake' : 'handshake outline'}
+                    name={props.user && reply.votes.includes(props.user._id) ? 'handshake' : 'handshake outline'}
                     size="large"
                 />
-
                 Votes: {reply.votes.length}
             </Label>
         </div>
@@ -115,12 +115,6 @@ export default function ShowQuibbl(props) {
             </Segment>
         )
     })
-
-    // passed down as a prop to NewAnswer
-    const handleReplyChange = (e) => {
-        setNewReply({ ...newReply, [e.target.name]: e.target.value })
-    }
-
 
     const options = {
         replace: (domNode) => {
@@ -145,6 +139,12 @@ export default function ShowQuibbl(props) {
                                     <div>
                                         {parse(currentQuibbl.description, options)}
                                     </div>
+                                    {props.user && props.user.userName === currentQuibbl.owner.userName == null ?
+                                    <EditQuibbl
+                                        quibbl={currentQuibbl}
+                                        user={props.user}
+                                        refreshQuibbl={props.refreshQuibbls}
+                                    /> : ""}
                                     <Rail position='right'>
                                         <Label>
                                             {currentQuibbl.owner.userName}

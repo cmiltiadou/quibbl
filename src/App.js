@@ -85,10 +85,11 @@ const App = () => {
 	
 
 	return (
+		
 		<Fragment>
 			<Header user={user} />
 			<Routes>
-				<Route path='/' element={<Home msgAlert={msgAlert} user={user} />} />
+				<Route path='/' element={<Home msgAlert={msgAlert} user={user} tags={tags} quibbls={quibbls} />} />
 				<Route
 					path='/sign-up'
 					element={<SignUp msgAlert={msgAlert} setUser={setUser} />}
@@ -149,6 +150,7 @@ const App = () => {
 				/>
 			))}
 		</Fragment>
+		
 	)
 }
 

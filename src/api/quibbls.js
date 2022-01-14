@@ -1,13 +1,11 @@
 import apiUrl from '../apiConfig'
 import axios from 'axios'
 
-export const getUsersQuibbls = (user) => {
+export const getUsersQuibbls = (searchId) => {
+    console.log('this is searchId', searchId)
     return axios({
         method: 'GET',
-        url: `${apiUrl}/quibbls/user`,
-        headers: {
-            Authorization: `Token token=${user.token}`
-        }
+        url: `${apiUrl}/quibbls/${searchId}`,
     })
 }
 
@@ -25,7 +23,7 @@ export const getOneQuibbl = (quibblId) => {
     })
 }
 
-export const postQuibbl = (user, quibblTitle, value, tags) => {
+export const postQuibbl = (user, quibblTitle, value, tags, quibblDuration) => {
     return axios({
         method: 'POST',
         url: apiUrl + '/quibbls',
@@ -36,7 +34,8 @@ export const postQuibbl = (user, quibblTitle, value, tags) => {
             quibbl: {
                 title: quibblTitle,
                 description: value,
-                tags: tags
+                tags: tags,
+                duration: quibblDuration
             }
         }
     })
@@ -50,7 +49,7 @@ export const destroyQuibbl = (user, itemId) => {
     })
 }
 
-export const updateQuibbl = (user, quibblId, changeQuibbl) => {
+export const updateQuibbl = (user, quibblId, value) => {
     console.log('THIS IS quibbl ID:', quibblId)
     return axios({
         method: 'PATCH',
@@ -60,7 +59,7 @@ export const updateQuibbl = (user, quibblId, changeQuibbl) => {
         },
         data: {
             quibbl: {
-                description: changeQuibbl
+                description: value
             }
         }
     })

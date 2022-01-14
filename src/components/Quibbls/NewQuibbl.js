@@ -1,48 +1,47 @@
 import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Editor } from '@tinymce/tinymce-react';
-import { Form, Input, Grid, Button, Segment, Rail, Container, Divider, Header, Select  } from 'semantic-ui-react'
+import { Form, Input, Grid, Button, Segment, Rail, Container, Divider, Header, Select, Message } from 'semantic-ui-react'
 
 
 
 import { postQuibbl } from '../../api/quibbls'
+import SignUp from '../auth/SignUp';
 
 export default function NewQuibbl(props) {
-    // console.log('this is props\n', props)
-    // console.log('here is the current user id:', props.user._id)
-
+    {/* //<----------- STATES BELOW ------>// */}
     const [value, setValue] = useState('')
     const [quibblTitle, setQuibblTitle] = useState('')
     const [tags, setTags] = useState([])
     const [quibblDuration, setQuibblDuration] = useState()
 
 
+    {/* //<----------- HELPER METHODS BELOW ------>// */}
 
+    // helper method for handling changes to tinyMCE editor
     const handleUpdate = (value, editor) => {
         const length = editor.getContent({ format: 'text' }).length
 
         setValue(value)
     }
-    
-  
 
+    // helper method to handle changes to assigned quibbl tags
     const handleTag = (tag) => {
         console.log('this is tag', tag._id)
-        if (tags.length < 2 && tags.includes(tag._id) === false){
+        if (tags.length < 2 && tags.includes(tag._id) === false) {
             setTags([...tags, tag._id])
-        }else if(tags.includes(tag._id)){
+        } else if (tags.includes(tag._id)) {
             let filteredTags = tags.filter(id => id !== tag._id)
             setTags(filteredTags)
         }
-        
-        
     }
 
+    // defining useNavigate so it can be called in helper
     const navigate = useNavigate()
-
-
-    // helper method attached to button
+    // helper method attached to button to create new quibbl
     const createNewQuibbl = () => {
+
+        if(quibblTitle !== "" && value !== "" && tags.length == 2 && quibblDuration !== ""){
         // axios call to create the new Quibbl in the db
         postQuibbl(props.user, quibblTitle, value, tags, quibblDuration)
             // console.log('this is the current user id:', user._id)
@@ -54,114 +53,118 @@ export default function NewQuibbl(props) {
             .catch(err => {
                 console.error(err)
             })
+        }else{
+            return(
+                <Message floating>Way to go!</Message>
+            )
+        }
     }
 
-    const handleSelect = (e) => {
-        console.log('selection', e)
+    // helper method for selecting quibbl duration
+    const handleSelect = (e, quibblDuration) => {
+        console.log('selection', quibblDuration)
+        setQuibblDuration(quibblDuration.value)
     }
-    
 
     const editorRef = useRef(null);
 
-    const allTags = props.tags.map((tag, key) =>{
-    
-        return(
-                    <Form.Field
-                        id='form-button-control-public'
-                        control={Button}
-                        size = "tiny"
-                        content={tag.description}
-                        onClick={() => handleTag(tag)}
-                        color={tags.includes(tag._id) ? tag.color : `${tag.color} basic`}
-                        key={tag.color}
-                    />
+    // map through props.tags and return to display
+    const allTags = props.tags.map((tag, key) => {
+        return (
+            <Form.Field
+                id='form-button-control-public'
+                control={Button}
+                size="tiny"
+                content={tag.description}
+                onClick={() => handleTag(tag)}
+                color={tags.includes(tag._id) ? tag.color : `${tag.color} basic`}
+                key={tag.color}
+            />
         )
     })
 
-
-
-
+    // define the options that the dropdown will display
     const duration = [
-        {key: 1, value: 1, text:'quick-quibbl | 1 hour'},
-        {key: 6, value: 6, text:'qaurter-quibbl | 6 hours'},
-        {key: 12, value: 12, text:'half-quibbl | 12 hours'},
-        {key: 24, value: 24, text:'full-quibbl | 24 hours'},
-        {key: 168, value: 168, text:'mega-quibbl - 1 week'},
-        
+        { key: 1, value: 1, text: 'quick-quibbl | 1 hour' },
+        { key: 6, value: 6, text: 'qaurter-quibbl | 6 hours' },
+        { key: 12, value: 12, text: 'half-quibbl | 12 hours' },
+        { key: 24, value: 24, text: 'full-quibbl | 24 hours' },
+        { key: 168, value: 168, text: 'mega-quibbl | 1 week' },
     ]
 
+    
     return (
-        <div>
-
-            <Container textAlign='left'>
-                <Divider hidden />
-                <Grid left columns={3}>
-                    <Grid.Column width={2}></Grid.Column>
-                    <Grid.Column width={9}>
-                        <Segment>
+        (props.user ? 
+        <Container textAlign='left'>
+            <Divider hidden />
+            <Grid left columns={3}>
+                <Grid.Column width={2}></Grid.Column>
+                <Grid.Column width={9}>
+                    <Segment>
                         <Form>
+                            {/* //<----------- TITLE INPUT ------>// */}
+                            <Form.Field
+                                id='form-input-control-title'
+                                control={Input}
+                                label='Title'
+                                placeholder='Title'
+                                value={quibblTitle || ''}
+                                onChange={e => setQuibblTitle(e.target.value)}
+                            />
+                            {/* //<----------- DROPDOWN MENU FOR DURATION ------>// */}
+                            <Select
+                                placeholder='quibbl duration'
+                                options={duration}
+                                value = {quibblDuration}
+                                onChange={handleSelect}
 
-                <Form.Field
-                    id='form-input-control-title'
-                    control={Input}
-                    label='Title'
-                    placeholder='Title'
-                    value = {quibblTitle || ''}
-                    onChange = {e => setQuibblTitle(e.target.value)}
-                />
-
-                <Select 
-                placeholder='quibbl duration' 
-                options={duration} 
-                onChange={e => handleSelect(e.target.options.duration.value)}
-                
-                />
-                <Divider hidden />
-                <Editor
-                    onEditorChange={handleUpdate}
-                    apiKey='irzgj1nh4gdtba8bmue61a2rc396j4xkurlck71s4piwwtqg'
-                    onInit={(evt, editor) => editorRef.current = editor}
-                    init={{
-                        height: 400,
-                        menubar: true,
-                        skins: 'oxide-dark',
-                        plugins: [
-                            'advlist autolink lists link image charmap preview anchor',
-                            'searchreplace visualblocks code fullscreen',
-                            'insertdatetime media table '
-                        ],
-                        toolbar:
-                            'bold italic backcolor | bullist numlist outdent indent | image media ',
-                        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:13px }'
-                    }}
-                />
-
-
-                <Form.Field
-                    id='form-button-control-public'
-                    control={Button}
-                    content='Submit quibbl'
-                    onClick={() => createNewQuibbl()}
-                />
-            </Form>
-                            <Rail position='right'>
-                                <Segment>
+                            />
+                            <Divider hidden />
+                            {/* //<----------- WYSIWYG EDITOR FOR DESCRIPTION ------>// */}
+                            <Editor
+                                onEditorChange={handleUpdate}
+                                apiKey='irzgj1nh4gdtba8bmue61a2rc396j4xkurlck71s4piwwtqg'
+                                onInit={(evt, editor) => editorRef.current = editor}
+                                init={{
+                                    height: 400,
+                                    menubar: false,
+                                    contextmenu: 'link | image | media',
+                                    skins: 'oxide-dark',
+                                    plugins: [
+                                        'advlist lists autolink link image charmap preview anchor',
+                                        'visualblocks code',
+                                        'insertdatetime media table emoticons '
+                                    ],
+                                    toolbar:
+                                        'bold italic backcolor | bullist numlist outdent indent | image media |emoticons ',
+                                    content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:13px }'
+                                }}
+                            />
+                            <Divider hidden/>
+                            {/* //<----------- QUIBBL SUBMIT BUTTON ------>// */}
+                            <Form.Field
+                                id='form-button-control-public'
+                                control={Button}
+                                content='Submit quibbl'
+                                onClick={() => createNewQuibbl()}
+                            />
+                        </Form>
+                        {/* //<----------- TAG SELECTION ------>// */}
+                        <Rail position='right'>
+                            <Segment>
                                 <Header as="h5">pick 2 tags that describe your quibble</Header>
-                                <Divider/>
-                    <Form>
-                    {allTags}
-                    </Form>
-                </Segment>
-                            </Rail>
-                        </Segment>
-                    </Grid.Column>
-                </Grid>
-                <Divider hidden />
-            </Container>
-
-
-            
-
-        </div>
+                                <Divider />
+                                <Form>
+                                    {allTags}
+                                </Form>
+                            </Segment>
+                        </Rail>
+                    </Segment>
+                </Grid.Column>
+            </Grid>
+            <Divider hidden />
+        </Container>
+        : <SignUp/>)
+        
     )
 }
