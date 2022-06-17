@@ -1,7 +1,7 @@
 let apiUrl
 const apiUrls = {
     // YOU MUST CHANGE PRODUCTION URL WHEN DEPLOYING
-	production: 'https://quibbl-api.herokuapp.com/',
+	production: 'https://quibbl-api.herokuapp.com',
 	development: 'http://localhost:8000',
 }
 
