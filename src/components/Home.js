@@ -12,7 +12,7 @@ const Home = (props) => {
 	const [officialQuibbls, setOffcialQuibbls] = useState([])
 
 	useEffect(() => {
-		let searchId = "626c3ae52b8d1896cea04cb1"
+		let searchId = process.env.QUIBBL_OF_ID
 		// axios call to find all problems in the db posted by quibbl_official
 		getUsersQuibbls(searchId)
 		.then((quibbls) => {
