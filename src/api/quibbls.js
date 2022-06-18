@@ -8,8 +8,7 @@ export const getUsersQuibbls = (searchId) => {
         url: `${apiUrl}/quibbls/${searchId}`,
     })
 }
-export const getOfficialQuibbls = () => {
-    
+export const getOfficialQuibbls = () => { 
     return axios({
         method: 'GET',
         url: `${apiUrl}/quibbls/official`,

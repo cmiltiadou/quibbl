@@ -2,7 +2,7 @@
 What some might call trivial arguments, our users call a good time. The goal of Quibbl is to give users a fun interactive place to discuss all sorts of debate topics. From things like which Jedi is actually the strongest, to what color is math! Users will be able to engage in debates and upvote other users that they agree with. 
 
 ## Deployed App
-coming soon
+<a href="https://quibbl.netlify.app/">Visit Quibbl</a>
 
 ## Server Repo
 https://github.com/cmiltiadou/quibbl-api
