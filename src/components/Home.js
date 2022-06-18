@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import Quibbl from './Quibbls/Quibbl'
-import { getUsersQuibbls } from '../api/quibbls'
+import { getOfficialQuibbls } from '../api/quibbls'
 import { Card, Container, Grid, Image, Header } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 import Typewriter from 'typewriter-effect'
@@ -12,9 +12,8 @@ const Home = (props) => {
 	const [officialQuibbls, setOffcialQuibbls] = useState([])
 
 	useEffect(() => {
-		let searchId = process.env.QUIBBL_OF_ID
 		// axios call to find all problems in the db posted by quibbl_official
-		getUsersQuibbls(searchId)
+		getOfficialQuibbls()
 		.then((quibbls) => {
 			console.log('these are all the problems in the db\n', quibbls.data.quibbls)
 			// sets all problems in the db to state
