@@ -17,7 +17,7 @@ const Home = (props) => {
 		.then((quibbls) => {
 			console.log('these are all the problems in the db\n', quibbls.data.quibbls)
 			// sets all problems in the db to state
-			setOffcialQuibbls(quibbls.data.foundQuibbls)
+			setOffcialQuibbls(quibbls.data.quibbls)
 		})
 		.catch(err => console.error(err))
 	}, [])
@@ -28,7 +28,7 @@ const Home = (props) => {
 
 	let allOfficialQuibbls
 	
-	if(officialQuibbls){
+	if(officialQuibbls != ){
 		allOfficialQuibbls = officialQuibbls.sort((a, b) => {
 			// return all problems from newest to oldest
 			return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
@@ -57,9 +57,6 @@ const Home = (props) => {
 		)
 	})
 
-	const change = () => {
-		console.log("changes")
-	}
 	if(officialQuibbls){
 	return (
 		<Container textAlign='left'>
