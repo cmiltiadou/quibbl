@@ -104,7 +104,9 @@ const Home = (props) => {
 		</Grid>
 		</Container>
 
-	)}
+	)}else{
+		return("loading quibbls...")
+	}
 }
 
 export default Home
