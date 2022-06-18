@@ -15,7 +15,7 @@ const Home = (props) => {
 		// axios call to find all problems in the db posted by quibbl_official
 		getOfficialQuibbls()
 		.then((quibbls) => {
-			console.log('these are all the problems in the db\n', quibbls.data.quibbls)
+			console.log('these are official quibbls\n', quibbls.data.quibbls)
 			// sets all problems in the db to state
 			setOffcialQuibbls(quibbls.data.quibbls)
 		})
@@ -44,7 +44,7 @@ const Home = (props) => {
 		
 	}
 
-	const allQuibbls = props.quibbls.sort((a, b) => {
+	const allQuibbls = props.quibbls.filter(quibbl => quibbl.owner.username != 'quibbl_official').sort((a, b) => {
 		// return all problems from newest to oldest
 		return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
 	}).reverse().map((q, i) => {
