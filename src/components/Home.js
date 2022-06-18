@@ -44,7 +44,7 @@ const Home = (props) => {
 		
 	}
 
-	const allQuibbls = props.quibbls.filter(quibbl => quibbl.owner.username != 'quibbl_official').sort((a, b) => {
+	const allQuibbls = props.quibbls.filter(quibbl => quibbl.owner.userName !== 'quibbl_official').sort((a, b) => {
 		// return all problems from newest to oldest
 		return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
 	}).reverse().map((q, i) => {
