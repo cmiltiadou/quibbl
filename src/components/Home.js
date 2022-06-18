@@ -25,19 +25,24 @@ const Home = (props) => {
 	const changeCurrent = quibll => {
 		setCurrentQuibbl(quibll)
 	}
+
+	let allOfficialQuibbls
 	
-	const allOfficialQuibbls = officialQuibbls.sort((a, b) => {
-		// return all problems from newest to oldest
-		return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-	}).reverse().map((q, i) => {
-		return (
-			<div onMouseEnter={() => changeCurrent(q)} key={i}>
-				<Link to={`/quibbls/${currentQuibbl._id}`}>
-					<Quibbl currentQuibbl={currentQuibbl} quibbl={q} key={i} />
-				</Link>
-			</div>
-		)
-	})
+	if(officialQuibbls){
+		allOfficialQuibbls = officialQuibbls.sort((a, b) => {
+			// return all problems from newest to oldest
+			return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+		}).reverse().map((q, i) => {
+			return (
+				<div onMouseEnter={() => changeCurrent(q)} key={i}>
+					<Link to={`/quibbls/${currentQuibbl._id}`}>
+						<Quibbl currentQuibbl={currentQuibbl} quibbl={q} key={i} />
+					</Link>
+				</div>
+			)
+		})
+		
+	}
 
 	const allQuibbls = props.quibbls.sort((a, b) => {
 		// return all problems from newest to oldest
