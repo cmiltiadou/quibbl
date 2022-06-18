@@ -60,7 +60,7 @@ const Home = (props) => {
 	const change = () => {
 		console.log("changes")
 	}
-
+	if(officialQuibbls){
 	return (
 		<Container textAlign='left'>
 		<Grid divided='vertically' stackable padded>
@@ -104,7 +104,7 @@ const Home = (props) => {
 		</Grid>
 		</Container>
 
-	)
+	)}
 }
 
 export default Home
